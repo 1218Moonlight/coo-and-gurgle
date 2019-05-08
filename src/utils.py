@@ -1,19 +1,18 @@
-class st:
-    stDic = []
+class stack():
+    def __init__(self):
+        self.__st = []
 
-
-class stack(st):
     def top(self):
-        return st.stDic[-1]
+        return self.__st[-1]
 
     def list(self):
-        return st.stDic
+        return self.__st
 
     def size(self):
-        return len(st.stDic)
+        return len(self.__st)
 
     def push(self, val):
-        st.stDic.append(val)
+        self.__st.append(val)
 
     def pop(self):
-        return st.stDic.pop()
+        return self.__st.pop()
