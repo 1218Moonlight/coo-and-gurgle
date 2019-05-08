@@ -1,4 +1,4 @@
-from . import utils as u
+from . import stack
 from . import opcode
 from . import lexer
 import tokenize
@@ -6,7 +6,7 @@ import tokenize
 
 class machine:
     def __init__(self, code):
-        self.__stack = u.stack()
+        self.__stack = stack.main()
         self.__op = opcode
         self.__lexer = lexer.main(code, self.__op, tokenize)
         self.__pointer = 0

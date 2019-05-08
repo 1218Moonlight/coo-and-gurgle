@@ -1,4 +1,4 @@
-class stack():
+class main():
     def __init__(self):
         self.__st = []
 
