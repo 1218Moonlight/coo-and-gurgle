@@ -1,42 +1,71 @@
-class main:
-    def __init__(self, code, opcode, tokenize):
-        self.__op = opcode
-        self.__tokenize = tokenize
+class Token(object):
+    def __init__(self, type, value):
+        self.type = type
+        self.value = value
+
+    def __str__(self):
+        return 'Token({type}, {value})'.format(
+            type=self.type,
+            value=repr(self.value)
+        )
+
+    def __repr__(self):
+        return self.__str__()
+
+
+class Main:
+    def __init__(self, code):
         self.__code = code
 
-    def run(self):
-        tokens = self.__tokenize.generate_tokens(self.__code.readline)
-        return self.__tokens(tokens)
+        self.__pos = 0
+        self.__current_char = self.__code[self.__pos]
 
-    def __tok(self, ty, val):
-        # token type = toTy, token value = toVal
-        return {'toTy': ty, 'toVal': val}
+    def __skipWhitespace(self):
+        while self.__current_char is not None and self.__current_char.isspace():
+            self.__advance()
 
-    def __tokens(self, tokens):
-        for toType, toValue, _, _, _ in tokens:
-            if toType == self.__tokenize.NUMBER:
-                yield self.__tok(self.__op.hexToString[self.__op.정수], toValue)
-            elif toType in [self.__tokenize.STRING, self.__tokenize.NAME,
-                            self.__tokenize.OP] or toValue in self.__op.stringToHex:
-                if toValue == "변수":
-                    yield self.__tok(self.__op.hexToString[self.__op.변수], None)
-                elif toValue == "더하기":
-                    yield self.__tok(self.__op.hexToString[self.__op.더하기], None)
-                elif toValue == "곱하기":
-                    yield self.__tok(self.__op.hexToString[self.__op.곱하기], None)
-                elif toValue == "빼기":
-                    yield self.__tok(self.__op.hexToString[self.__op.빼기], None)
-                elif toValue == "나누기":
-                    yield self.__tok(self.__op.hexToString[self.__op.나누기], None)
-                elif toValue == "출력":
-                    yield self.__tok(self.__op.hexToString[self.__op.출력], None)
-                elif toValue == "나가기":
-                    yield self.__tok(self.__op.hexToString[self.__op.나가기], None)
-                else:
-                    yield self.__tok(self.__tokenize.tok_name[toType], toValue)
-            elif toType == self.__tokenize.NEWLINE:
-                yield self.__tok(self.__op.hexToString[self.__op.개행], None)
-            elif toType == self.__tokenize.ENDMARKER:
-                break
+    def __advance(self):
+        self.__pos += 1
+        if self.__pos > len(self.__code) - 1:
+            self.__current_char = None
+        else:
+            self.__current_char = self.__code[self.__pos]
+
+    def __integer(self):
+        result = ''
+        while self.__current_char is not None and self.__current_char.isdigit():
+            result += self.__current_char
+            self.__advance()
+        return int(result)
+
+    def getNextToken(self):
+        while self.__current_char is not None:
+            if self.__current_char.isspace():
+                self.__skipWhitespace()
+                continue
+            elif self.__current_char.isdigit():
+                return Token('정수', self.__integer())
+
+            elif self.__current_char == '더하기':
+                self.__advance()
+                return Token('더하기', None)
+
+            elif self.__current_char == '곱하기':
+                self.__advance()
+                return Token('곱하기', None)
+
+            elif self.__current_char == '빼기':
+                self.__advance()
+                return Token('빼기', None)
+
+            elif self.__current_char == '나누기':
+                self.__advance()
+                return Token('나누기', None)
+
+            elif self.__current_char == '나가기':
+                self.__advance()
+                return Token('나가기', 0)
             else:
-                raise RuntimeError("Unknown token %s: '%s'" % (self.__tokenize.tok_name[toType], toValue))
+                raise RuntimeError("Unknown token : '%s'" % self.__current_char)
+
+        return Token('EOF', None)
