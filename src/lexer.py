@@ -27,6 +27,8 @@ def __tokens(tokens):
                 yield __tok(op.hexToString[op.빼기], None)
             elif toValue == "나누기":
                 yield __tok(op.hexToString[op.나누기], None)
+            elif toValue == "출력":
+                yield __tok(op.hexToString[op.출력], None)
             else:
                 yield __tok(tokenize.tok_name[toType], toValue)
         elif toType == tokenize.NEWLINE:

@@ -22,6 +22,8 @@ class machine(u.stack):
                 self.stack.push(self.stack.pop() - self.stack.pop())
             elif bytecode[self.pointer] == op.나누기:
                 self.stack.push(self.stack.pop() % self.stack.pop())
+            elif bytecode[self.pointer] == op.출력:
+                print(self.stack.pop())
             elif bytecode[self.pointer] == op.개행:
                 pass
             else:
