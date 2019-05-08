@@ -1,9 +1,5 @@
-from . import opcode
-import tokenize
-
-
 class main:
-    def __init__(self, code):
+    def __init__(self, code, opcode, tokenize):
         self.__op = opcode
         self.__tokenize = tokenize
         self.__code = code
@@ -18,9 +14,10 @@ class main:
 
     def __tokens(self, tokens):
         for toType, toValue, _, _, _ in tokens:
-            if toType == tokenize.NUMBER:
+            if toType == self.__tokenize.NUMBER:
                 yield self.__tok(self.__op.hexToString[self.__op.정수], toValue)
-            elif toType in [tokenize.STRING, tokenize.NAME, tokenize.OP] or toValue in self.__op.stringToHex:
+            elif toType in [self.__tokenize.STRING, self.__tokenize.NAME,
+                            self.__tokenize.OP] or toValue in self.__op.stringToHex:
                 if toValue == "변수":
                     yield self.__tok(self.__op.hexToString[self.__op.변수], None)
                 elif toValue == "더하기":
@@ -34,10 +31,10 @@ class main:
                 elif toValue == "출력":
                     yield self.__tok(self.__op.hexToString[self.__op.출력], None)
                 else:
-                    yield self.__tok(tokenize.tok_name[toType], toValue)
-            elif toType == tokenize.NEWLINE:
+                    yield self.__tok(self.__tokenize.tok_name[toType], toValue)
+            elif toType == self.__tokenize.NEWLINE:
                 yield self.__tok(self.__op.hexToString[self.__op.개행], None)
-            elif toType == tokenize.ENDMARKER:
+            elif toType == self.__tokenize.ENDMARKER:
                 break
             else:
-                raise RuntimeError("Unknown token %s: '%s'" % (tokenize.tok_name[toType], toValue))
+                raise RuntimeError("Unknown token %s: '%s'" % (self.__tokenize.tok_name[toType], toValue))

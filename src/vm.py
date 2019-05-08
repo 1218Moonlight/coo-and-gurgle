@@ -1,15 +1,15 @@
 from . import utils as u
 from . import opcode
 from . import lexer
+import tokenize
 
 
 class machine(u.stack):
     def __init__(self, code):
-        self.lexer = lexer
-        self.code = code
         self.stack = u.stack()
-        self.pointer = 0
         self.op = opcode
+        self.lexer = lexer.main(code, self.op, tokenize)
+        self.pointer = 0
 
     def run(self):
         bytecode = self.__compile(self.__getTokens())
@@ -48,4 +48,4 @@ class machine(u.stack):
         return bytecode
 
     def __getTokens(self):
-        return self.lexer.main(self.code).run()
+        return self.lexer.run()
