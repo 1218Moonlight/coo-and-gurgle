@@ -30,6 +30,8 @@ class main:
                     yield self.__tok(self.__op.hexToString[self.__op.나누기], None)
                 elif toValue == "출력":
                     yield self.__tok(self.__op.hexToString[self.__op.출력], None)
+                elif toValue == "나가기":
+                    yield self.__tok(self.__op.hexToString[self.__op.나가기], None)
                 else:
                     yield self.__tok(self.__tokenize.tok_name[toType], toValue)
             elif toType == self.__tokenize.NEWLINE:

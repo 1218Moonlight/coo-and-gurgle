@@ -1,7 +1,7 @@
 """ python3 """
 
 from src import vm
-import sys, os
+import sys, os, io
 
 
 def cagRun():
@@ -11,11 +11,15 @@ def cagRun():
         raise RuntimeError("Error Extension 'not .cag'")
 
     with open(cagPath, 'r', encoding='UTF8') as f:
-        vm.machine(f).run()
+        vm.machine(sys, f).run()
 
 
 def repl():
-    print("...")
+    print('[INFO] \"나가기\"를 입력하면 repl가 종료됩니다.')
+
+    while True:
+        source = input('>> ')
+        vm.machine(sys, io.StringIO(source)).run()
 
 
 if __name__ == '__main__':

@@ -5,7 +5,8 @@ import tokenize
 
 
 class machine:
-    def __init__(self, code):
+    def __init__(self, sys, code):
+        self.__sys = sys
         self.__stack = stack.main()
         self.__op = opcode
         self.__lexer = lexer.main(code, self.__op, tokenize)
@@ -29,6 +30,8 @@ class machine:
                 print(self.__stack.pop())
             elif bytecode[self.__pointer] == self.__op.개행:
                 pass
+            elif bytecode[self.__pointer] == self.__op.나가기:
+                self.__sys.exit(0)
             else:
                 raise RuntimeError(
                     "Bytecode Error %s" % (bytecode[self.__pointer]))
@@ -48,3 +51,4 @@ class machine:
 
     def __getTokens(self):
         return self.__lexer.run()
+
