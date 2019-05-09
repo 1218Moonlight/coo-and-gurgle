@@ -27,6 +27,7 @@ class Main:
         return node.value
 
     def view_Exit(self, node):
+        print("[INFO] coo and gurgle 종료")
         self.__sys.exit(node.value)
 
     def run(self):

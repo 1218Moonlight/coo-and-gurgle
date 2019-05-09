@@ -27,8 +27,9 @@ class VM:
             raise RuntimeError("Error Extension 'not .cag'")
 
         with open(cagPath, 'r', encoding='UTF8') as f:
-            result = self.__inter.Main(f.readline().split(), self.__lexer, self.__parse, self.__op, self.__sys).run()
-            print(result)
+            for v in f.readlines():
+                result = self.__inter.Main(v.split(), self.__lexer, self.__parse, self.__op, self.__sys).run()
+                print(result)
 
     def __repl(self):
         print('[INFO] \"나가기\"를 입력하면 터미널이 종료됩니다.')
