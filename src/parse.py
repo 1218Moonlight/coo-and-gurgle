@@ -22,9 +22,10 @@ class Exit(AST):
 
 
 class Main(object):
-    def __init__(self, lexer):
+    def __init__(self, lexer, opcode):
         self.__lexer = lexer
         self.__currentToken = self.__lexer.getNextToken()
+        self.__op = opcode
 
     def __error(self):
         raise Exception('Invalid syntax')
@@ -37,21 +38,21 @@ class Main(object):
 
     def __factor(self):
         token = self.__currentToken
-        if token.type == "정수":
-            self.__eat("정수")
+        if token.type == self.__op.hexToString(self.__op.정수):
+            self.__eat(self.__op.hexToString(self.__op.정수))
             return Num(token)
-        elif token.type == "나가기":
-            self.__eat("나가기")
+        elif token.type == self.__op.hexToString(self.__op.나가기):
+            self.__eat(self.__op.hexToString(self.__op.나가기))
             return Exit(token)
 
     def __term(self):
         node = self.__factor()
-        while self.__currentToken.type in ("곱하기", "나누기"):
+        while self.__currentToken.type in (self.__op.hexToString(self.__op.곱하기), self.__op.hexToString(self.__op.나누기)):
             token = self.__currentToken
-            if token.type == "곱하기":
-                self.__eat("곱하기")
-            elif token.type == "나누기":
-                self.__eat("나누기")
+            if token.type == self.__op.hexToString(self.__op.곱하기):
+                self.__eat(self.__op.hexToString(self.__op.곱하기))
+            elif token.type == self.__op.hexToString(self.__op.나누기):
+                self.__eat(self.__op.hexToString(self.__op.나누기))
 
             node = BinOp(left=node, op=token, right=self.__factor())
 
@@ -60,12 +61,12 @@ class Main(object):
     def __expr(self):
         node = self.__term()
 
-        while self.__currentToken.type in ("더하기", "빼기"):
+        while self.__currentToken.type in (self.__op.hexToString(self.__op.더하기), self.__op.hexToString(self.__op.빼기)):
             token = self.__currentToken
-            if token.type == "더하기":
-                self.__eat("더하기")
-            elif token.type == "빼기":
-                self.__eat("빼기")
+            if token.type == self.__op.hexToString(self.__op.더하기):
+                self.__eat(self.__op.hexToString(self.__op.더하기))
+            elif token.type == self.__op.hexToString(self.__op.빼기):
+                self.__eat(self.__op.hexToString(self.__op.빼기))
 
             node = BinOp(left=node, op=token, right=self.__term())
 

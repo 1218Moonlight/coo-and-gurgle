@@ -14,9 +14,9 @@ class Token(object):
 
 
 class Main:
-    def __init__(self, code):
+    def __init__(self, code, opcode):
         self.__code = code
-
+        self.__op = opcode
         self.__pos = 0
         self.__current_char = self.__code[self.__pos]
 
@@ -44,28 +44,28 @@ class Main:
                 self.__skipWhitespace()
                 continue
             elif self.__current_char.isdigit():
-                return Token('정수', self.__integer())
+                return Token(self.__op.hexToString(self.__op.정수), self.__integer())
 
-            elif self.__current_char == '더하기':
+            elif self.__current_char == self.__op.hexToString(self.__op.더하기):
                 self.__advance()
-                return Token('더하기', None)
+                return Token(self.__op.hexToString(self.__op.더하기), None)
 
-            elif self.__current_char == '곱하기':
+            elif self.__current_char == self.__op.hexToString(self.__op.곱하기):
                 self.__advance()
-                return Token('곱하기', None)
+                return Token(self.__op.hexToString(self.__op.곱하기), None)
 
-            elif self.__current_char == '빼기':
+            elif self.__current_char == self.__op.hexToString(self.__op.빼기):
                 self.__advance()
-                return Token('빼기', None)
+                return Token(self.__op.hexToString(self.__op.빼기), None)
 
-            elif self.__current_char == '나누기':
+            elif self.__current_char == self.__op.hexToString(self.__op.나누기):
                 self.__advance()
-                return Token('나누기', None)
+                return Token(self.__op.hexToString(self.__op.나누기), None)
 
-            elif self.__current_char == '나가기':
+            elif self.__current_char == self.__op.hexToString(self.__op.나가기):
                 self.__advance()
-                return Token('나가기', 0)
+                return Token(self.__op.hexToString(self.__op.나가기), 0)
             else:
                 raise RuntimeError("Unknown token : '%s'" % self.__current_char)
 
-        return Token('EOF', None)
+        return Token(self.__op.hexToString(self.__op.EOF), None)

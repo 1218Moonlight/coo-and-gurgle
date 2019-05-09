@@ -1,6 +1,6 @@
 """ python3 """
 
-from src import interpreter, lexer, parse
+from src import interpreter, lexer, parse, opcode
 import sys
 import os
 
@@ -10,6 +10,9 @@ class VM:
         self.__sys = sys
         self.__os = os
         self.__inter = interpreter
+        self.__op = opcode.Main()
+        self.__parse = parse
+        self.__lexer = lexer
 
     def run(self):
         if len(self.__sys.argv) > 1:
@@ -24,8 +27,7 @@ class VM:
             raise RuntimeError("Error Extension 'not .cag'")
 
         with open(cagPath, 'r', encoding='UTF8') as f:
-            # todo: 가장 윗줄 코드만 처리됨. 여러 줄 처리가 되도록 해야 함. (*OPCODE 재정의 해야함.)
-            result = self.__inter.Main(f.readline().split(), lexer, parse, self.__sys).run()
+            result = self.__inter.Main(f.readline().split(), self.__lexer, self.__parse, self.__op, self.__sys).run()
             print(result)
 
     def __repl(self):
@@ -33,7 +35,7 @@ class VM:
 
         while True:
             source = input('>> ')
-            result = self.__inter.Main(source.split(), lexer, parse, self.__sys).run()
+            result = self.__inter.Main(source.split(), self.__lexer, self.__parse, self.__op, self.__sys).run()
             print(result)
 
 
